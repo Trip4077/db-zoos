@@ -26,7 +26,12 @@ server.post('/api/zoos', (req, res) => {
 
 //Get zoos
 server.get('/api/zoos', (req, res) => {
-   
+   db('zoos')
+      .then(zoos => {
+        res.json(zoos);
+      }).catch(err => {
+        res.status(500).json(err)
+      })
 })
 
 const port = 3300;
