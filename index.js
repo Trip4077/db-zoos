@@ -36,14 +36,30 @@ server.get('/api/zoos', (req, res) => {
 
 //Get zoo by ID
 server.get('/api/zoos/:id', (req, res) => {
-  db('zoos').where({ id: req.params.id })
-            .then(zoo => {
-              res.json(zoo);
-            })
-            .catch(err => {
-              res.json(err)
-            });
-})
+  db('zoos')
+      .where({ id: req.params.id })
+      .then(zoo => {
+        res.json(zoo);
+      })
+      .catch(err => {
+        res.json(err)
+      });
+});
+
+//Edit zoo by ID
+server.put('/api/zoos/:id', (req, res) => {
+  const changes = req.body;
+  const { id } = req.params;
+
+  db('zoos')
+    .where({ id })
+    .update(changes)
+    .then(zoo => {
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    });
+});
 
 const port = 3300;
 server.listen(port, function() {
