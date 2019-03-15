@@ -61,6 +61,20 @@ server.put('/api/zoos/:id', (req, res) => {
     });
 });
 
+//Delete zoo
+server.delete('/api/zoos/:id', (req, res) => {
+  const { id } = req.params;
+
+  db('zoos')
+    .where({ id })
+    .del()
+    .then(zoo => {
+      res.status(200).json(zoo)
+    }).catch(err => {
+      res.status(500).json(err)
+    });
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
