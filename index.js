@@ -34,6 +34,17 @@ server.get('/api/zoos', (req, res) => {
       })
 })
 
+//Get zoo by ID
+server.get('/api/zoos/:id', (req, res) => {
+  db('zoos').where({ id: req.params.id })
+            .then(zoo => {
+              res.json(zoo);
+            })
+            .catch(err => {
+              res.json(err)
+            });
+})
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
