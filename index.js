@@ -10,6 +10,9 @@ server.use(express.json());
 server.use(helmet());
 
 // endpoints here
+/*
+  ZOOS ENDPOINTS
+*/
 //Add Zoo
 server.post('/api/zoos', (req, res) => {
   const zoo = req.body;
@@ -74,6 +77,20 @@ server.delete('/api/zoos/:id', (req, res) => {
       res.status(500).json(err)
     });
 });
+
+/*
+  BEARS ENDPOINTS
+*/
+
+server.get('/api/bears', (req, res) => {
+  db('bears')
+    .then(bears => {
+      res.status(200).json(bears)
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+})
 
 const port = 3300;
 server.listen(port, function() {
