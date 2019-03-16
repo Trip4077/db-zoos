@@ -82,10 +82,36 @@ server.delete('/api/zoos/:id', (req, res) => {
   BEARS ENDPOINTS
 */
 
+//POST new bear
+server.post('/api/bears', (req, res) => {
+  const bear = req.body;
+
+  db.insert(bear)
+    .into('bears')
+    .then(id => {
+      res.status(201).json(id[0]);
+    }).catch(err => {
+      res.status(500).json(err);
+    });
+})
+
+//GET all bears
 server.get('/api/bears', (req, res) => {
   db('bears')
     .then(bears => {
       res.status(200).json(bears)
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+})
+
+//GET bear by ID
+server.get('/api/bears/:id', (req, res) => {
+  db('bears')
+    .where({ id: req.params.id })
+    .then(bear => {
+      res.status(200).json(bear[0])
     })
     .catch(err => {
       res.status(500).json(err);
