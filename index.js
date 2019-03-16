@@ -16,8 +16,8 @@ server.post('/api/zoos', (req, res) => {
 
   db.insert(zoo)
     .into('zoos')
-    .then(ids => {
-      res.status(201).json(ids);
+    .then(id => {
+      res.status(201).json(id[0]);
     })
     .catch(err => {
       res.status(500).json(err);
@@ -39,7 +39,7 @@ server.get('/api/zoos/:id', (req, res) => {
   db('zoos')
       .where({ id: req.params.id })
       .then(zoo => {
-        res.json(zoo);
+        res.json(zoo[0]);
       })
       .catch(err => {
         res.json(err)
