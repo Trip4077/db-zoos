@@ -57,7 +57,8 @@ server.put('/api/zoos/:id', (req, res) => {
   db('zoos')
     .where({ id })
     .update(changes)
-    .then(zoo => {
+    .then(success => {
+      res.status(200).json(success);
     })
     .catch(err => {
       res.status(500).json(err)
@@ -116,6 +117,35 @@ server.get('/api/bears/:id', (req, res) => {
     .catch(err => {
       res.status(500).json(err);
     })
+})
+
+//EDIT bear by ID
+server.put('/api/bears/:id', (req, res) => {
+  const changes = req.body;
+  const { id } = req.params;
+
+  db('bears')
+    .where({ id })
+    .update(changes)
+    .then(success => {
+      res.status(200).json(success);
+    }).catch(err => {
+      res.status(200),json(err);
+    });
+})
+
+//DELETE bear by ID
+server.delete('/api/bears/:id', (req, res) => {
+  const { id } = req.params;
+
+  db('bears')
+    .where({ id })
+    .del()
+    .then(bear => {
+      res.status(200).json(bear);
+    }).catch(err => {
+      res.status(500).json(err);
+    });
 })
 
 const port = 3300;
