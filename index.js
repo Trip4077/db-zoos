@@ -10,14 +10,17 @@ server.use(express.json());
 server.use(helmet());
 
 // endpoints here
+/*
+  ZOOS ENDPOINTS
+*/
 //Add Zoo
 server.post('/api/zoos', (req, res) => {
   const zoo = req.body;
 
   db.insert(zoo)
     .into('zoos')
-    .then(ids => {
-      res.status(201).json(ids);
+    .then(id => {
+      res.status(201).json(id[0]);
     })
     .catch(err => {
       res.status(500).json(err);
@@ -39,7 +42,7 @@ server.get('/api/zoos/:id', (req, res) => {
   db('zoos')
       .where({ id: req.params.id })
       .then(zoo => {
-        res.json(zoo);
+        res.json(zoo[0]);
       })
       .catch(err => {
         res.json(err)
@@ -54,7 +57,8 @@ server.put('/api/zoos/:id', (req, res) => {
   db('zoos')
     .where({ id })
     .update(changes)
-    .then(zoo => {
+    .then(success => {
+      res.status(200).json(success);
     })
     .catch(err => {
       res.status(500).json(err)
@@ -74,6 +78,75 @@ server.delete('/api/zoos/:id', (req, res) => {
       res.status(500).json(err)
     });
 });
+
+/*
+  BEARS ENDPOINTS
+*/
+
+//POST new bear
+server.post('/api/bears', (req, res) => {
+  const bear = req.body;
+
+  db.insert(bear)
+    .into('bears')
+    .then(id => {
+      res.status(201).json(id[0]);
+    }).catch(err => {
+      res.status(500).json(err);
+    });
+})
+
+//GET all bears
+server.get('/api/bears', (req, res) => {
+  db('bears')
+    .then(bears => {
+      res.status(200).json(bears)
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+})
+
+//GET bear by ID
+server.get('/api/bears/:id', (req, res) => {
+  db('bears')
+    .where({ id: req.params.id })
+    .then(bear => {
+      res.status(200).json(bear[0])
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+})
+
+//EDIT bear by ID
+server.put('/api/bears/:id', (req, res) => {
+  const changes = req.body;
+  const { id } = req.params;
+
+  db('bears')
+    .where({ id })
+    .update(changes)
+    .then(success => {
+      res.status(200).json(success);
+    }).catch(err => {
+      res.status(200),json(err);
+    });
+})
+
+//DELETE bear by ID
+server.delete('/api/bears/:id', (req, res) => {
+  const { id } = req.params;
+
+  db('bears')
+    .where({ id })
+    .del()
+    .then(bear => {
+      res.status(200).json(bear);
+    }).catch(err => {
+      res.status(500).json(err);
+    });
+})
 
 const port = 3300;
 server.listen(port, function() {
